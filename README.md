@@ -3,16 +3,20 @@ Por Ana Carolina de Lima Macedo
 
 Resolução do desafio de código Indicium para Desenvolvedor de Software:
 
-Para atingir o objetivo do desafio, optei por utilizar o Airflow, uma ferramenta projetada para descrever, executar e monitorar fluxos de trabalho.
+Na criação de um pipeline de dados, optei pelo Airflow, uma ferramenta eficaz para descrever, executar e monitorar fluxos de trabalho.
+O pipeline aborda três tarefas essenciais:
+1. Extração de Dados do PostgreSQL para o Disco Local:
+   - Estabelece conexão com o PostgreSQL, extrai dados e os armazena em arquivos CSV locais.
+   - Cada tabela gera um arquivo próprio, organizado em uma estrutura de diretórios por fonte, tabela e data de execução.
+2. Cópia do Arquivo CSV para o Disco Local:
+   - A organização do arquivo segue uma estrutura de diretórios baseada na data de execução.
+3. Extração, Transformação e Carregamento no MongoDB:
+   - Extrai dados dos arquivos CSV locais representando pedidos, produtos, clientes e detalhes do pedido.
+   - Transforma os dados, unindo tabelas e organizando em formato JSON compatível com o MongoDB.
+   - Carrega os dados transformados no MongoDB, facilitando recuperação e análise.
 
-O pipeline em questão possui três tarefas principais:
-1. Extrair dados do banco de dados Postgres e armazená-los no disco local.
-2. Extrair dados de um arquivo CSV e gravá-los no disco local.
-3. Extrair dados do sistema de arquivos local, transformá-los e carregá-los no banco de dados final.
+O pipeline é configurado em um DAG, e agendado para execução diária. 
 
-Cada uma dessas tarefas foi implementada por meio de scripts em Python:
-- Tarefa 1: Estabelece conexão com o Banco de Dados Postgres, obtém os nomes de todas as tabelas e escreve os dados em um arquivo local, indicando o caminho para cada fonte, tabela e dia de execução.
-- Tarefa 2: Copia o conteúdo do arquivo CSV e o escreve em um arquivo local, especificando o caminho para cada fonte, tabela e dia de execução.
-- Tarefa 3: Extrai dados locais, realiza junções entre tabelas e salva o resultado em formato JSON no banco de dados Mongo. A escolha pelo formato JSON foi feita devido à possibilidade de listar produtos do mesmo pedido no mesmo JSON, facilitando para um desenvolvedor front-end caso deseje apresentar os detalhes do pedido com a lista de produtos.
+A solução é containerizada usando o Docker para simplificar implantação e gestão, enquanto o Docker Compose configura o ambiente de forma direta.
 
-Além disso, optei por containerizar minha solução utilizando o Docker. Após configurar o código, é viável testar tarefas isoladas ou o pipeline completo em datas passadas.
+Oferecendo uma abordagem eficaz escolhi implementar as tarefas em Python. A Tarefa 3 adota o formato JSON para facilitar a apresentação de detalhes do pedido com a lista de produtos aos desenvolvedores front-end.
